@@ -1,0 +1,9 @@
+@font-face {
+    font-family: "Dejavu";
+    src: url("font.ttf") format("truetype");
+}
+
+body{
+	font-family: "Dejavu", Verdana, Tahoma;
+	background: black;
+	color: white;
