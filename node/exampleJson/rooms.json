@@ -1,0 +1,26 @@
+[
+	{
+		"name": "a room",
+		"id": 1,
+		"members": 30
+		"online": 7
+	},
+	{
+		"name": "a room",
+		"id": 2,
+		"members": 30
+		"online": 7
+	},
+	{
+		"name": "a room",
+		"id": 3,
+		"members": 30
+		"online": 7
+	},
+	{
+		"name": "a room",
+		"id": 4,
+		"members": 30
+		"online": 7
+	}
+]
