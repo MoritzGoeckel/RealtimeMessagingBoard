@@ -133,6 +133,14 @@ function addInputListener(func)
 	listeners.push(func);
 }
 
+output = "";
+maxLines = 10;
+
+function setMaxLines(lines)
+{
+	maxLines = lines;
+}
+
 function printLine(str, type)
 {
 	var start = "<span class='c_message'>";
@@ -151,5 +159,15 @@ function printLine(str, type)
 	
 	var end = "</span>";
 	
-	$("#terminalField").html($("#terminalField").html() + start + str + end + "<br />");
+	output += start + str + end + "<br />";
+	var outputLineArray = output.split('<br />');
+	if(outputLineArray.length-1 > maxLines)
+	{
+		output = "";
+		for(var i = 1; i < outputLineArray.length; i++)
+			if(outputLineArray[i] != "" && outputLineArray[i] != " ")
+				output += outputLineArray[i] + "<br />";
+	}
+
+	$("#terminalField").html(output);
 }
