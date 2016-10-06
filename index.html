@@ -10,8 +10,14 @@
 </head>
 
 <body>
-		Willkommen...<br />
-		<span id="inputLine"><span />
+		<span id="terminalField"></span>
+		<span id="inputField"></span>
+		
+		<script>
+			printLine("Willkommen...", "hig");
+			printLine("Was geht?", "imp");
+			addInputListener(function(line){ alert(line + " wurde gesagt"); });
+		</script>
 </body>
 
 

@@ -6,4 +6,20 @@
 body{
 	font-family: "Dejavu", Verdana, Tahoma;
 	background: black;
+}
+
+.c_interactive{
+	color: #00FF00;
+}
+
+.c_message{
 	color: white;
+}
+
+.c_important{
+	color: red;
+}
+
+.c_highlight{
+	color: blue;
+}
