@@ -10,8 +10,12 @@ addInputListener(function(line){
 
 });
 
+setInterval(pullMessages, 3000);
+
 function choosRoomMenu()
 {
+	currentRoom = "none";
+	lastSeenMessageIdInRoom = new Array();
 	printLine("Choose room", "imp");
 	nextState = openChat;
 	
@@ -22,18 +26,33 @@ function choosRoomMenu()
 	});
 }
 
+lastSeenMessageIdInRoom = new Array();
 function openChat(line)
 {
 	printLine("Entering " + line, "imp");
 	nextState = inChat;
 	
 	currentRoom = line;
-	
-	$.getJSON( "http://localhost:3000/msgs/" + line, function( data ) {
-		$.each( data, function( key, val ) {
-			printLine(val.username + ": " + val.content, "hig");
+	lastSeenMessageIdInRoom[""+currentRoom] = -1;
+
+	pullMessages();
+}
+
+function pullMessages()
+{
+	if(currentRoom != "none")
+	{
+		$.getJSON( "http://localhost:3000/msgs/" + currentRoom, function( data ) {
+			$.each( data, function( key, val ) {
+				if(val.msgid > lastSeenMessageIdInRoom[currentRoom])
+				{
+					printLine(val.username + ": " + val.content, "hig");
+					lastSeenMessageIdInRoom[currentRoom] = val.msgid;
+				}
+				
+			});
 		});
-	});
+	}
 }
 
 currentRoom = "none";
@@ -41,6 +60,8 @@ function inChat(line)
 {
 	if(line == "exit")
 		choosRoomMenu();
+	else if(line == "pull")
+		pullMessages();
 	else 
 	{
 		//Write msg
@@ -50,5 +71,6 @@ function inChat(line)
 		};
 		
 		$.post( "http://localhost:3000/insertmsg/" + currentRoom, (JSON.stringify(msg))); //encodeURIComponent
+		pullMessages();
 	}
 }

@@ -75,7 +75,7 @@ const server = http.createServer((req, res) => {
 			console.log("Insert Msg:");
 			console.log(jsonObject); 
 			
-			msgs[id].unshift(jsonObject);
+			msgs[id].push(jsonObject);
 			
 			req.connection.destroy();
 		});
