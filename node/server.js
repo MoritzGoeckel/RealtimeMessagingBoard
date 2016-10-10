@@ -64,7 +64,7 @@ const server = http.createServer((req, res) => {
 		var id = params[params.length - 1];
 		
 		req.on('data', function (data) {
-			data = decodeURIComponent(data);
+			data = (data); //decodeURIComponent
 			
 			var jsonObject = JSON.parse(data);
 			

@@ -49,6 +49,6 @@ function inChat(line)
 			"content": line
 		};
 		
-		$.post( "http://localhost:3000/insertmsg/" + currentRoom, encodeURIComponent(JSON.stringify(msg)));
+		$.post( "http://localhost:3000/insertmsg/" + currentRoom, (JSON.stringify(msg))); //encodeURIComponent
 	}
 }
