@@ -2,7 +2,7 @@ baseUrl = "http://moritzg.serpens.uberspace.de/n/";
 
 setMaxLines(10);
 
-printLine("### Welcome ###", "hig");
+printLine("### Welcome ###", "blue");
 
 choosRoomMenu();
 
@@ -18,12 +18,12 @@ function choosRoomMenu()
 {
 	currentRoom = "none";
 	lastSeenMessageIdInRoom = new Array();
-	printLine("Choose room", "imp");
+	printLine("Choose room", "blue");
 	nextState = openChat;
 	
 	$.getJSON( baseUrl + "rooms", function( data ) {
 		$.each( data, function( key, val ) {
-			printLine(val.id + ": " + val.name + " | " + val.online + "/" + val.members, "hig");
+			printLine(val.id + ": " + val.name + " | " + val.online + "/" + val.members, "green");
 		});
 	});
 }
@@ -33,7 +33,7 @@ function openChat(line)
 {
 	//Todo check whether room exists
 	
-	printLine("Entering " + line, "imp");
+	printLine("Entering " + line, "blue");
 	nextState = inChat;
 	
 	currentRoom = line;
@@ -50,7 +50,7 @@ function pullMessages()
 			$.each( data, function( key, val ) {
 				if(val.msgid > lastSeenMessageIdInRoom[currentRoom])
 				{
-					printLine(val.username + ": " + val.content, "hig");
+					printLine(val.username + ": " + val.content, "green");
 					lastSeenMessageIdInRoom[currentRoom] = val.msgid;
 				}
 				

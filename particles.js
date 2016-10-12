@@ -110,7 +110,7 @@ demo.draw = function() {
 spawnParticles = function() {
 	var i, x = $('#inputField').offset().left + $('#inputField').width(), y = $('#inputField').offset().top;
 
-	for ( i = 0; i < 10; i++ ) {
+	for ( i = 0; i < 5; i++ ) {
 		x = x + random( -10, 10 );
 		y = y + random( -10, 10 );
 		demo.spawn( x, y );

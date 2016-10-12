@@ -8,19 +8,19 @@ body{
 	background: black;
 }
 
-.c_interactive{
+.green{
 	color: #00FF00;
 }
 
-.c_message{
+.white{
 	color: white;
 }
 
-.c_important{
+.red{
 	color: red;
 }
 
-.c_highlight{
+.blue{
 	color: blue;
 }
 

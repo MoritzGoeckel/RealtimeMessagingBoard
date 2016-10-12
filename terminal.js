@@ -51,6 +51,14 @@ function processKey(key, ingoreCtrl = false)
 		if(inputIndex > input.length)
 			inputIndex = input.length;
 	}
+	if(key == "Delete")
+	{
+		input = input.substr(0, input.length - inputIndex) + input.substr(input.length - inputIndex + 1);
+		inputhistoryIndex = 0;
+		
+		if(inputIndex > input.length)
+			inputIndex = input.length;
+	}
 	else if(key == "Enter")
 	{
 		if((inputHistory[0] == "" || inputHistory[0] == " "))
@@ -104,7 +112,10 @@ function processKey(key, ingoreCtrl = false)
 	else if(key.length == 1 && (ctrlDown == false || ingoreCtrl))
 	{
 		historyIndex = 0;
-		input += key;
+		if(inputIndex == 0)
+			input += key;
+		else
+			input = input.substr(0, input.length - inputIndex) + key + input.substr(input.length - inputIndex);
 	}
 	
 	moving = true;
@@ -114,14 +125,14 @@ function processKey(key, ingoreCtrl = false)
 
 function renderInput()
 {
-	$("#inputField").html("<span class='c_message'>" + input.substr(0, input.length - inputIndex) + (showBlock ? "<span class='c_interactive'>&block;</span>" : "  ") + input.substr(input.length - inputIndex) + "</span>");
+	$("#inputField").html("<span class='white'>" + input.substr(0, input.length - inputIndex) + (showBlock ? "<span class='green'>&block;</span>" : "  ") + input.substr(input.length - inputIndex) + "</span>");
 }
 
 function submitInput(line)
 {
 	if(line != "" && line != " ")
 	{
-		printLine("-> " + line, "msg");
+		printLine("-> " + line, "white");
 		for(var i = 0; i < listeners.length; i++)
 			listeners[i](line);
 	}
@@ -141,22 +152,9 @@ function setMaxLines(lines)
 	maxLines = lines;
 }
 
-function printLine(str, type)
+function printLine(str, cssClass)
 {
-	var start = "<span class='c_message'>";
-	
-	if(type == "int")
-		start = "<span class='c_interactive'>";
-	
-	if(type == "imp")
-		start = "<span class='c_important'>";
-	
-	if(type == "hig")
-		start = "<span class='c_highlight'>";
-	
-	if(type == "msg")
-		start = "<span class='c_message'>";
-	
+	var start = "<span class='"+cssClass+"'>";
 	var end = "</span>";
 	
 	output += start + str + end + "<br />";
