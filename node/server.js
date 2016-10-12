@@ -63,11 +63,10 @@ const server = http.createServer((req, res) => {
 		var params = path.split("/");
 		var id = params[params.length - 1];
 		
-		req.on('data', function (data) {
-			data = (data); //decodeURIComponent
-			
+		req.on('data', function (data) {			
 			var jsonObject = JSON.parse(data);
 			
+			//Haha very hackable :) todo
 			jsonObject.username = "Anonymous";
 			jsonObject.date = new Date().toUTCString();
 			jsonObject.msgid = nextMessageId++;
@@ -76,6 +75,36 @@ const server = http.createServer((req, res) => {
 			console.log(jsonObject); 
 			
 			msgs[id].push(jsonObject);
+			
+			//Todo: delete old messages
+			while(msgs[id].length > 50)
+				msgs[id].splice(0, 1)
+			
+			req.connection.destroy();
+		});
+		
+		res.writeHead(200, {'Content-Type': 'text/html'});
+        res.end('Recieved msg');
+	}
+	else if(path.startsWith("/insertroom/") && req.method == 'POST')
+	{
+		req.on('data', function (data) {
+			var jsonObject = JSON.parse(data);
+			
+			var newRoom = {};
+			
+			newRoom.name = jsonObject.name;
+			newRoom.id = nextRoomId++;
+			newRoom.members = 0;
+			newRoom.online = 0;
+	
+			console.log("Insert room:");
+			console.log(newRoom); 
+			
+			rooms[id].push(newRoom);
+			
+			//Todo: delete old unused rooms
+			
 			
 			req.connection.destroy();
 		});
