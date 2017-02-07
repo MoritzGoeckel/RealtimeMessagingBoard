@@ -19,7 +19,7 @@ The server does all the logic, supports a simple command structure and is easily
 ## Extending the server
 As an example for a command take a look at the "/join" command. This command lets a user join an existing room or create a new room. It also checks whether the user has to be checked out of her room and notifies the other users about his leaving and joining.
 
-´´´ Javascript
+``` Javascript
 //Extending the commands array
 commands.push(
 	{
@@ -50,4 +50,4 @@ commands.push(
 		}
 	}
 );
-´´´
+```
