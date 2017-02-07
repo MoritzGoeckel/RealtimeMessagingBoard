@@ -51,10 +51,10 @@ $().ready(function(){
 			}
 			else
 			{
-				terminal.printLine("##################", 'green');
+				terminal.printLine("################################", 'green');
 				terminal.printLine("Now in room: " + enteredRoom.name, "green");
 				terminal.printLine("Type 'exit' to leave", "green");
-				terminal.printLine("##################", 'green');
+				terminal.printLine("################################", 'green');
 				
 				socket.emit('join', {room:enteredRoom.id});
 				
@@ -93,7 +93,3 @@ $().ready(function(){
 	}
 	
 });
-
-/*$.each( data, function( key, val ) {
-			printLine(val.id + ": " + val.name + " | " + val.online + "/" + val.members, "green");
-		});*/
