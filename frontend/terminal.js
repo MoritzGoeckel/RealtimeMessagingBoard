@@ -1,18 +1,19 @@
 class Terminal{
 	constructor(inputFieldId, terminalFieldId){
 
+		//Private / Local
+		let ctrlDown = false;
+		let inputIndex = 0;
+		let inputhistoryIndex = 0;
+		let inputHistory = [];
+		let input = "";
+		let showBlock = true;
+		let moving = false;
+
+		//Public / Global
 		this.inputFieldId = inputFieldId;
 		this.terminalFieldId = terminalFieldId;
-
-		this.ctrlDown = false;
 		this.readLineCallback = undefined;
-
-		this.inputIndex = 0;
-		this.inputhistoryIndex = 0;
-		this.inputHistory = [];
-		this.input = "";
-		this.showBlock = true;
-		this.moving = false;
 		this.listeners = [];
 		this.output = "";
 
@@ -36,87 +37,87 @@ class Terminal{
 
 		let renderInput = function()
 		{
-			$("#" + theBase.inputFieldId).html("<span class='white'>" + theBase.input.substr(0, theBase.input.length - theBase.inputIndex) + (theBase.showBlock ? "<span class='green'>&block;</span>" : "  ") + theBase.input.substr(theBase.input.length - theBase.inputIndex) + "</span>");
+			$("#" + inputFieldId).html("<span class='white'>" + input.substr(0, input.length - inputIndex) + (showBlock ? "<span class='green'>&block;</span>" : "  ") + input.substr(input.length - inputIndex) + "</span>");
 		}
 
 		let processKey = function(key, ingoreCtrl = false)
 		{
 			if(key == "Backspace")
 			{
-				theBase.input = theBase.input.substr(0, theBase.input.length - theBase.inputIndex - 1) + theBase.input.substr(theBase.input.length - theBase.inputIndex);
-				theBase.inputhistoryIndex = 0;
+				input = input.substr(0, input.length - inputIndex - 1) + input.substr(input.length - inputIndex);
+				inputhistoryIndex = 0;
 				
-				if(theBase.inputIndex > theBase.input.length)
-					theBase.inputIndex = theBase.input.length;
+				if(inputIndex > input.length)
+					inputIndex = input.length;
 			}
 			if(key == "Delete")
 			{
-				theBase.input = theBase.input.substr(0, theBase.input.length - theBase.inputIndex) + theBase.input.substr(theBase.input.length - theBase.inputIndex + 1);
-				theBase.inputhistoryIndex = 0;
+				input = theBase.input.substr(0, input.length - inputIndex) + input.substr(input.length - inputIndex + 1);
+				inputhistoryIndex = 0;
 				
-				if(theBase.inputIndex > theBase.input.length)
-					theBase.inputIndex = theBase.input.length;
+				if(inputIndex > input.length)
+					inputIndex = input.length;
 			}
 			else if(key == "Enter")
 			{
-				if((theBase.inputHistory[0] == "" || theBase.inputHistory[0] == " "))
-					theBase.inputHistory.shift();
+				if((inputHistory[0] == "" || inputHistory[0] == " "))
+					inputHistory.shift();
 				
-				if(theBase.inputHistory[0] != theBase.input)
-					theBase.inputHistory.unshift(theBase.input);
+				if(inputHistory[0] != input)
+					inputHistory.unshift(input);
 				
-				theBase.inputhistoryIndex = 0;
-				submitInput(theBase.input);
-				theBase.input = "";
+				inputhistoryIndex = 0;
+				submitInput(input);
+				input = "";
 				
-				theBase.inputIndex = 0;
+				inputIndex = 0;
 			}
 			else if(key == "ArrowUp")
 			{
-				if(theBase.inputhistoryIndex == 0 && theBase.inputHistory[0] != input)
-					theBase.inputHistory.unshift(theBase.input);
+				if(inputhistoryIndex == 0 && inputHistory[0] != input)
+					inputHistory.unshift(input);
 				
-				if(theBase.inputhistoryIndex < theBase.inputHistory.length - 1)
+				if(inputhistoryIndex < inputHistory.length - 1)
 				{	
-					theBase.inputhistoryIndex++;
-					theBase.input = theBase.inputHistory[theBase.inputhistoryIndex];
+					inputhistoryIndex++;
+					input = inputHistory[inputhistoryIndex];
 				}
 				
-				theBase.inputIndex = 0;
+				inputIndex = 0;
 			}
 			else if(key == "ArrowDown")
 			{
-				if(theBase.inputhistoryIndex > 0)
+				if(inputhistoryIndex > 0)
 				{	
-					theBase.inputhistoryIndex--;
-					theBase.input = theBase.inputHistory[inputhistoryIndex];
+					inputhistoryIndex--;
+					input = inputHistory[inputhistoryIndex];
 				}
 				
-				if(theBase.inputhistoryIndex == 0 && (theBase.inputHistory[0] == "" || theBase.inputHistory[0] == " "))
-					theBase.inputHistory.shift();
+				if(inputhistoryIndex == 0 && (inputHistory[0] == "" || inputHistory[0] == " "))
+					inputHistory.shift();
 				
-				theBase.inputIndex = 0;
+				inputIndex = 0;
 			}
 			else if(key == "ArrowLeft")
 			{
-				if(theBase.inputIndex < theBase.input.length)
-					theBase.inputIndex++;
+				if(inputIndex < input.length)
+					inputIndex++;
 			}
 			else if(key == "ArrowRight")
 			{
-				if(theBase.inputIndex > 0)
-					theBase.inputIndex--;
+				if(inputIndex > 0)
+					inputIndex--;
 			}
-			else if(key.length == 1 && (theBase.ctrlDown == false || theBase.ingoreCtrl))
+			else if(key.length == 1 && (ctrlDown == false || ingoreCtrl))
 			{
-				theBase.historyIndex = 0;
-				if(theBase.inputIndex == 0)
-					theBase.input += key;
+				inputhistoryIndex = 0;
+				if(inputIndex == 0)
+					input += key;
 				else
-					theBase.input = theBase.input.substr(0, theBase.input.length - theBase.inputIndex) + key + theBase.input.substr(theBase.input.length - theBase.inputIndex);
+					input = input.substr(0, theBase.length - inputIndex) + key + input.substr(input.length - inputIndex);
 			}
 			
-			theBase.moving = true;
+			moving = true;
 			
 			renderInput();
 		}
@@ -126,9 +127,9 @@ class Terminal{
 		});
 		
 		$("body").keydown(function(e) {
-			if (e.keyCode == 17 || e.keyCode == 91) theBase.ctrlDown = true;
+			if (e.keyCode == 17 || e.keyCode == 91) ctrlDown = true;
 		}).keyup(function(e) {
-			if (e.keyCode == 17 || e.keyCode == 91) theBase.ctrlDown = false;
+			if (e.keyCode == 17 || e.keyCode == 91) ctrlDown = false;
 		});
 		
 		$("body").on('paste', function(e) {
@@ -139,11 +140,11 @@ class Terminal{
 		
 		setInterval(function()
 			{ 
-				theBase.showBlock = (theBase.showBlock ? false : true);
-				if(theBase.moving)
+				showBlock = (showBlock ? false : true);
+				if(moving)
 				{
-					theBase.showBlock = true;
-					theBase.moving = false;
+					showBlock = true;
+					moving = false;
 				}
 				
 				renderInput(); 
