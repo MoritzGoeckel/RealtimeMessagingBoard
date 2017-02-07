@@ -4,6 +4,8 @@ This is realtime messaging board application created in NodeJS with the arcitect
 ## Client
 The client is extremly thin and only supports reading and writing in a text based terminal. It also supports every other functionality you would expect from a terminal. (Arrow up / down / command history etc)
 
+![alt tag](https://raw.githubusercontent.com/MoritzGoeckel/RealtimeMessagingBoard/master/demo.png)
+
 ## Server
 The server does all the logic, supports a simple command structure and is easily extended for other commands. The currently implemented commands form a fully functional realtime messeging board. The server supports the following commands right now:
 
@@ -51,9 +53,6 @@ commands.push(
 	}
 );
 ```
-
-## Client screenshot
-![alt tag](https://raw.githubusercontent.com/MoritzGoeckel/RealtimeMessagingBoard/master/demo.png)
 
 ## Dependencies
 The NodeJS server uses the following dependencies:
