@@ -153,6 +153,8 @@ class Terminal{
 		console.log("Init finished");
 	}
 
+	//Print line and read the next one
+	//Or just read a line
 	readLine(outputOrCallback, cssClass, callback){
 
 		if(arguments.length == 3)
@@ -169,6 +171,7 @@ class Terminal{
 			throw new Error("Only 3 or 1 argument allowed");
 	}
 
+	//Prints a line out
 	printLine(str, cssClass)
 	{
 		var start = "<span class='"+cssClass+"'>";
@@ -191,12 +194,14 @@ class Terminal{
 		$("#" + this.terminalFieldId).html(this.output);
 	}
 
+	//Add general input listener
 	addInputListener(func)
 	{
 		this.listeners.push(func);
 		return this.listeners.length - 1;
 	}
 
+	//Remove a listener
 	removeInputListener(listener)
 	{
 		this.listeners.splice(listener, 1);

@@ -1,4 +1,4 @@
-
+//adding a cool particle animation to the terminal
 function addParticle(terminal)
 {
 

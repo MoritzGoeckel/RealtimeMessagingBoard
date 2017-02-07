@@ -28,6 +28,8 @@ let rooms = {
 
 let users = {};
 
+//Supporting Functions
+//Notifing all the user in a room
 function notifyInRoom(room, message){
 	let usersToNotify = rooms[room].users;
 	for(let i in usersToNotify)
@@ -36,6 +38,7 @@ function notifyInRoom(room, message){
 	}
 }
 
+//Checking a user out of her room
 function checkoutUser(userid){
 	if(users[userid].room != undefined)
 	{
@@ -55,16 +58,31 @@ function checkoutUser(userid){
 	}
 }
 
-let commands = [{disc:"/help", regex:/^\/help$/, fn:
-		function(args, userid, socket){
+//Defining the possible commands
+let commands = [];
+
+//Help
+commands.push(
+	{
+		disc:"/help", 
+		regex:/^\/help$/, 
+		fn:function(args, userid, socket)
+		{
 			socket.emit("print", "#############################");
 			for(let i in commands)
 				socket.emit("print", commands[i].disc);
 			socket.emit("print", "#############################");				
 		}
-	},
-	{disc:"/name [user name]", regex:/^\/name ([a-zA-Z0-9]+)$/, fn:
-		function(args, userid, socket){
+	}
+);
+
+//name
+commands.push(
+	{
+		disc:"/name [user name]", 
+		regex:/^\/name ([a-zA-Z0-9]+)$/, 
+		fn:function(args, userid, socket)
+		{
 			let newName = args[1];
 			
 			let found = false;
@@ -91,14 +109,28 @@ let commands = [{disc:"/help", regex:/^\/help$/, fn:
 				socket.emit("print", "Error: name already taken");
 			}				
 		}
-	},
-	{disc:"/name", regex:/^\/name$/, fn:
-		function(args, userid, socket){
+	}
+);
+	
+//name
+commands.push(
+	{
+		disc:"/name", 
+		regex:/^\/name$/, 
+		fn:function(args, userid, socket)
+		{
 			socket.emit("print", "Your name is " + users[userid].name);
 		}
-	},
-	{disc:"/join [room name]", regex:/^\/join ([a-zA-Z0-9]+)$/, fn:
-		function(args, userid, socket){
+	}
+);
+
+//Join
+commands.push(
+	{
+		disc:"/join [room name]", 
+		regex:/^\/join ([a-zA-Z0-9]+)$/, 
+		fn:function(args, userid, socket)
+		{
 			let roomName = args[1];
 			
 			//Create room
@@ -113,14 +145,28 @@ let commands = [{disc:"/help", regex:/^\/help$/, fn:
 			rooms[roomName].users.push(userid);
 			notifyInRoom(roomName, users[userid].name + " joined the room");	
 		}
-	},
-	{disc:"/leave", regex:/^\/leave$/, fn:
-		function(args, userid, socket){
+	}
+);
+
+//Leave
+commands.push(
+	{
+		disc:"/leave",
+		regex:/^\/leave$/, 
+		fn:function(args, userid, socket)
+		{
 			checkoutUser(userid);
 		}
-	},
-	{disc:"/people", regex:/^\/people$/, fn:
-		function(args, userid, socket){
+	}
+);
+
+//People
+commands.push(
+	{
+		disc:"/people", 
+		regex:/^\/people$/, 
+		fn:function(args, userid, socket)
+		{
 			if(users[userid].room != undefined)
 			{
 				let output = "Users in room:";
@@ -138,9 +184,16 @@ let commands = [{disc:"/help", regex:/^\/help$/, fn:
 				socket.emit("print", "Error: Cant see people here");
 			}
 		}
-	},
-	{disc:"/rooms", regex:/^\/rooms$/, fn:
-		function(args, userid, socket){
+	}
+);
+
+//Rooms
+commands.push(
+	{
+		disc:"/rooms", 
+		regex:/^\/rooms$/, 
+		fn:function(args, userid, socket)
+		{
 			for(let r in rooms)
 			{
 				let extra = "";
@@ -149,9 +202,16 @@ let commands = [{disc:"/help", regex:/^\/help$/, fn:
 				socket.emit("print", r + extra);
 			}
 		}
-	},
-	{disc:"[message]", regex:/^([^\/]+)$/, fn:
-		function(args, userid, socket){
+	}
+);
+
+//Message
+commands.push(
+	{
+		disc:"[message]", 
+		regex:/^([^\/]+)$/, 
+		fn:function(args, userid, socket)
+		{
 			if(users[userid].room != undefined)
 			{
 				notifyInRoom(users[userid].room, users[userid].name + ": " + args[1]);
@@ -162,16 +222,20 @@ let commands = [{disc:"/help", regex:/^\/help$/, fn:
 			}
 		}
 	}
-];
+);
 
+//Handle server connections
 server.on('connection', function(socket){
 
+	//Init user
 	let id = nextUserId++;
 	users[id] = {id:id, name:"anon_" + id, socket:socket, room:undefined};
 
+	//Send welcome message
 	socket.emit("print", "Welcome!");
 	socket.emit("print", "use /help");
 
+	//Ask what the client wants to do
 	let askLoop = function(){
 		socket.emit("ask", "", function(line){
 			let done = false;
@@ -194,6 +258,7 @@ server.on('connection', function(socket){
 
 	askLoop();
 
+	//On disconnect -> Remove user
 	socket.on('disconnect', function(){
 		checkoutUser(id);
 		delete users[id];
