@@ -52,8 +52,21 @@ commands.push(
 );
 ```
 
-##Dependencies
+## Client screenshot
+![alt tag](https://raw.githubusercontent.com/MoritzGoeckel/RealtimeMessagingBoard/master/demo.png)
+
+## Dependencies
 The NodeJS server uses the following dependencies:
 
 * express
 * socket.io
+
+## Run
+To run the server execute 
+``` 
+node ./server.js
+```
+For the client visit the url
+``` 
+http://localhost:3000
+```
