@@ -92,6 +92,7 @@ server.on('connection', function(socket){
 				}
 
 			rooms[users[id].room].users.splice(index, 1);
+			users[id].room = -1;
 		}
 	};
 
@@ -111,6 +112,29 @@ server.on('connection', function(socket){
 
 	socket.on('leave', function(msg){
 		checkout();
+	});
+
+	socket.on('create_room', function(msg){
+		let found = false;
+		for(let i in rooms)
+		{
+			if(rooms[i].name == msg.name)
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if(found == false)
+		{
+			rooms[nextRoomId++] = {
+				"name": msg.name,
+				"users":[],
+				"msgs":[]
+			};
+		}
+
+		//Remove them sometimes?
 	});
 
 	socket.on('disconnect', function(){

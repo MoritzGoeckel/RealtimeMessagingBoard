@@ -2,7 +2,7 @@ $().ready(function(){
 	
 	let terminal = new Terminal("inputField", "terminalField");
 
-	addParticle(terminal);
+	//addParticle(terminal);
 
 	baseUrl = "http://moritzg.serpens.uberspace.de/n/";
 
@@ -38,58 +38,78 @@ $().ready(function(){
 	function askForRoom()
 	{
 		terminal.readLine("Enter room:", "white", function(line){
-			for(let i in rooms)
-				if(rooms[i].id == line){
-					enteredRoom = rooms[i];
-					break;
-				}
-
-			if(enteredRoom == undefined)
+			
+			if(line.startsWith("create "))
 			{
-				terminal.printLine("Room does not exist", "red");
-				askForRoom();
+				socket.emit("create_room", {name:line.substring("create ".length)});
+				openRoomsMenu();
 			}
 			else
 			{
-				terminal.printLine("################################", 'green');
-				terminal.printLine("Now in room: " + enteredRoom.name, "green");
-				terminal.printLine("Type 'exit' to leave", "green");
-				terminal.printLine("################################", 'green');
-				
-				socket.emit('join', {room:enteredRoom.id});
-				
-				let listener = terminal.addInputListener(function(line){
-					if(line != "exit")
-					{
-						terminal.printLine("You: " + line, "green");
-						socket.emit('message', {room:enteredRoom.id, msg:line});
+				for(let i in rooms)
+					if(rooms[i].id == line){
+						enteredRoom = rooms[i];
+						break;
 					}
-					else
-					{
-						rooms = undefined;
-						terminal.removeInputListener(listener);					
-						openRoomsMenu();
-					}
-				});
+
+				if(enteredRoom == undefined)
+				{
+					terminal.printLine("Room does not exist", "red");
+					openRoomsMenu();
+				}
+				else
+				{
+					terminal.printLine("################################", 'green');
+					terminal.printLine("Now in room: " + enteredRoom.name, "green");
+					terminal.printLine("Type 'exit' to leave", "green");
+					terminal.printLine("################################", 'green');
+					
+					socket.emit('join', {room:enteredRoom.id});
+					
+					let listener = terminal.addInputListener(function(line){
+						if(line != "exit")
+						{
+							//terminal.printLine("You: " + line, "green");
+							socket.emit('message', {room:enteredRoom.id, msg:line});
+						}
+						else
+						{
+							enteredRoom = undefined;
+							rooms = undefined;
+							terminal.removeInputListener(listener);					
+							openRoomsMenu();
+						}
+					});
+				}
 			}
 		});
 	}
 
 	function openRoomsMenu()
 	{
+		socket.emit('leave', '');
 		socket.emit('rooms', '');
 		let interval = setInterval(function(){
 			if(rooms != undefined)
 			{
 				clearInterval(interval);
-				terminal.printLine("Rooms: ", "green");
+				terminal.printLine("################################", 'green');
+				terminal.printLine("Enter a room by typing the id", 'green');
+				terminal.printLine("or create a room by typing 'create [room name]'", 'green');
+				terminal.printLine(" ", "green");
+				terminal.printLine("Open rooms: ", "green");
 
 				for(let i in rooms)
-					terminal.printLine(rooms[i].id + " " + rooms[i].name + " (" + rooms[i].users + ")", 'green');
+				{
+					let userNotif = "";
+					if(rooms[i].users > 0)
+						userNotif = " (" + rooms[i].users + " active)";
+					terminal.printLine(rooms[i].id + " " + rooms[i].name + userNotif, 'green');
+				}
+				terminal.printLine("################################", 'green');
 
 				askForRoom();
 			}
 		}, 100);
 	}
-	
 });
