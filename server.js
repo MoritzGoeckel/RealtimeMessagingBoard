@@ -68,8 +68,6 @@ server.on('connection', function(socket){
 			let newMessage = {msg:msg.msg, id:nextMessageId++, date:new Date().toISOString(), user:id, userName:users[id].name};
 			rooms[msg.room].msgs.push(newMessage);
 
-			console.log(newMessage);
-
 			for(let i in rooms[msg.room].users)
 			{
 				if(rooms[msg.room].users[i] != id)
@@ -118,6 +116,5 @@ server.on('connection', function(socket){
 	socket.on('disconnect', function(){
 		checkout();
 		delete users[id];
-		console.log(users);
 	});
 });
