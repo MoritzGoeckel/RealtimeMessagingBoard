@@ -1,4 +1,5 @@
- ctrlDown = false;
+ctrlDown = false;
+readLineCallback = undefined;
 
 $().ready(function(){
 	
@@ -128,6 +129,11 @@ function renderInput()
 	$("#inputField").html("<span class='white'>" + input.substr(0, input.length - inputIndex) + (showBlock ? "<span class='green'>&block;</span>" : "  ") + input.substr(input.length - inputIndex) + "</span>");
 }
 
+function readLine(output, cssClass, callback){
+	readLineCallback = callback;
+	printLine(output, cssClass);
+}
+
 function submitInput(line)
 {
 	if(line != "" && line != " ")
@@ -135,6 +141,12 @@ function submitInput(line)
 		printLine("-> " + line, "white");
 		for(var i = 0; i < listeners.length; i++)
 			listeners[i](line);
+		
+		if(readLineCallback != undefined)
+		{
+			readLineCallback(line);
+			readLineCallback = undefined;
+		}
 	}
 }
 
@@ -142,21 +154,25 @@ listeners = [];
 function addInputListener(func)
 {
 	listeners.push(func);
+	return listeners.length - 1;
+}
+
+function removeInputListener(listener)
+{
+	listeners.splice(listener, 1);
 }
 
 output = "";
-maxLines = 10;
-
-function setMaxLines(lines)
-{
-	maxLines = lines;
-}
 
 function printLine(str, cssClass)
 {
 	var start = "<span class='"+cssClass+"'>";
 	var end = "</span>";
 	
+	var fontSize = $("#terminalField").css('font-size');
+	var lineHeight = Math.floor(parseInt(fontSize.replace('px','')) * 1.5);
+	var maxLines = Math.floor($("body").height() / lineHeight);
+
 	output += start + str + end + "<br />";
 	var outputLineArray = output.split('<br />');
 	if(outputLineArray.length-1 > maxLines)
