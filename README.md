@@ -1,5 +1,5 @@
-# Server Terminal
-This is realtime messeging board application created in with the arcitecture of a server terminal. 
+# Realtime Messaging Board / Server Terminal
+This is realtime messaging board application created in NodeJS with the arcitecture of a server terminal. 
 
 ## Client
 The client is extremly thin and only supports reading and writing in a text based terminal. It also supports every other functionality you would expect from a terminal. (Arrow up / down / command history etc)
@@ -51,3 +51,9 @@ commands.push(
 	}
 );
 ```
+
+##Dependencies
+The NodeJS server uses the following dependencies:
+
+* express
+* socket.io

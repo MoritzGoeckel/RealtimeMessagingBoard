@@ -231,7 +231,7 @@ server.on('connection', function(socket){
 	let id = nextUserId++;
 	users[id] = {id:id, name:"anon_" + id, socket:socket, room:undefined};
 
-	//Send welcome message
+	//Send the welcome message
 	socket.emit("print", "Welcome!");
 	socket.emit("print", "use /help");
 
