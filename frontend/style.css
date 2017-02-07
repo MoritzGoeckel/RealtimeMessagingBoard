@@ -5,15 +5,17 @@
 
 body{
 	font-family: "Dejavu", Verdana, Tahoma;
-	background: black;
+	background-color: rgb(0, 2, 0);
 }
 
 .green{
-	color: #00FF00;
+	color: rgb(0, 240, 0);
+	text-shadow: 0px 0px 10px rgba(0, 240, 0, 0.7);
 }
 
 .white{
-	color: white;
+	color: rgb(230, 230, 230);
+	text-shadow: 0px 0px 10px rgba(230, 230, 230, 0.7);	
 }
 
 .red{

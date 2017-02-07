@@ -7,11 +7,25 @@ $().ready(function(){
 	baseUrl = "http://moritzg.serpens.uberspace.de/n/";
 
 	let socket = io.connect('http:' + window.location.href.split(":")[1] + ':3001');
-	let rooms = undefined;
+	//let rooms = undefined;
 
-	let enteredRoom = undefined;
+	//let enteredRoom = undefined;
 
-	socket.on('message', function(msg){
+	socket.on('ask', function(msg, awnser){
+		if(msg != "")
+			terminal.printLine(msg, "green");
+
+		terminal.readLine(function(line){
+			awnser(line);
+			console.log(line);
+		});
+	});
+
+	socket.on('print', function(msg){
+		terminal.printLine(msg, "green");
+	});
+
+	/*socket.on('message', function(msg){
 		console.log(msg);
 		if(msg.room = enteredRoom.id)
 			terminal.printLine(msg.userName + ": " + msg.msg, "green");
@@ -111,5 +125,5 @@ $().ready(function(){
 				askForRoom();
 			}
 		}, 100);
-	}
+	}*/
 });

@@ -153,9 +153,20 @@ class Terminal{
 		console.log("Init finished");
 	}
 
-	readLine(output, cssClass, callback){
-		this.readLineCallback = callback;
-		this.printLine(output, cssClass);
+	readLine(outputOrCallback, cssClass, callback){
+
+		if(arguments.length == 3)
+		{
+			this.readLineCallback = callback;
+			this.printLine(outputOrCallback, cssClass);
+		}
+		else
+		if(arguments.length == 1)
+		{
+			this.readLineCallback = outputOrCallback;
+		}
+		else
+			throw new Error("Only 3 or 1 argument allowed");
 	}
 
 	printLine(str, cssClass)
