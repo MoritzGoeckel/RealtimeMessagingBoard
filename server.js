@@ -100,7 +100,7 @@ commands.push(
 				if(users[userid].roomName != undefined)
 					notifyInRoom(users[userid].roomName, users[userid].name + " renamed in " + newName);
 				else
-					socket.emit("print", "Renamed in " + newName);
+					socket.emit("print", "Renamed to " + newName);
 
 				users[userid].name = newName;
 			}

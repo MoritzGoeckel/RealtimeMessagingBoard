@@ -23,7 +23,7 @@ class Terminal{
 		{
 			if(line != "" && line != " ")
 			{
-				theBase.printLine("-> " + line, "white");
+				theBase.printLine(line, "white");
 				for(var i = 0; i < theBase.listeners.length; i++)
 					theBase.listeners[i](line);
 				
@@ -178,7 +178,7 @@ class Terminal{
 		var end = "</span>";
 		
 		var fontSize = $("#" + this.terminalFieldId).css('font-size');
-		var lineHeight = Math.floor(parseInt(fontSize.replace('px','')) * 1.5);
+		var lineHeight = Math.floor(parseInt(fontSize.replace('px','')) * 1.1);
 		var maxLines = Math.floor($("body").height() / lineHeight);
 
 		this.output += start + str + end + "<br />";
